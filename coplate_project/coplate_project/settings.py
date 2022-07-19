@@ -141,7 +141,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static/' # 이런 상태에서 정적파일의 url 주소는 도메인(localhost:8000)/static/각각의 폴더 안 파일 경로
+MEDIA_ROOT = os.path.join(BASE_DIR, "media") # 미디어 파일 어디 있는지 알려주는 역할
+MEDIA_URL = '/uploads/' # 이거는 미디어 파일 경로 지정해주는 역할
 
 # Auth Settings
 

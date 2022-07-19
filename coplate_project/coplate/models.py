@@ -19,3 +19,23 @@ class Review(models.Model):
     title = models.CharField(max_length=30)
     restaurant_name = models.CharField(max_length=20)
     restaurant_link = models.URLField()
+
+    RATING_CHOICES = [
+        (1, 1), # 해당 tuple 자료형에서 왼쪽 숫자는 model에 들어가는 애들이고 오른쪽은 선택지에 보여지는 값임
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    ]
+    rating = models.IntegerField(choices=RATING_CHOICES)
+
+    image1 = models.ImageField()
+    image2 = models.ImageField()
+    image3 = models.ImageField()
+    content = models.TextField()
+    dt_created = models.DateTimeField(auto_now_add=True) # 생성된 시간 자동으로 field에 넣어줌
+    dt_updated = models.DateTimeField(auto_now=True) # 마지막으로 저장된 시간 자동으로 field에 넣어줌
+
+    def __str__(self): # 리뷰의 제목 출력
+        return self.title
+    

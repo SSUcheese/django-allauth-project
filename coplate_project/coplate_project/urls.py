@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView # 띠로 로직 안 만들고 그냥 generic view 이용하기
+from django.conf import settings
+from django.conf.urls.static import static
 from coplate.views import CustomPasswordChangeView
 
 # allauth에 연관된 페이지는 project urls.py에 넣어준다
@@ -36,3 +38,6 @@ urlpatterns = [
     ), # allauth에 있는 password/change 찾기 전에 여기 있는 애로 걸려서 들어간다.
     path('', include("allauth.urls")),
 ]
+
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
