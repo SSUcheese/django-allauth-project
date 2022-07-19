@@ -1,0 +1,38 @@
+"""coplate_project URL Configuration
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/2.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path, include
+from django.views.generic import TemplateView # 띠로 로직 안 만들고 그냥 generic view 이용하기
+from coplate.views import CustomPasswordChangeView
+
+# allauth에 연관된 페이지는 project urls.py에 넣어준다
+
+urlpatterns = [
+    # admin
+    path('admin/', admin.site.urls),
+    # coplate
+    path('', include('coplate.urls')), # 이거 겹쳐도 위에서부터 쭈르륵 확인하니까 ㄱㅊ
+    # allauth
+    path("email-confirmation-done/",
+        TemplateView.as_view(template_name="coplate/email_confirmation_done.html"),
+        name="account_email_confirmation_done"
+    ),
+    path('password/change/', 
+        CustomPasswordChangeView.as_view(), 
+        name="account_password_change"
+    ), # allauth에 있는 password/change 찾기 전에 여기 있는 애로 걸려서 들어간다.
+    path('', include("allauth.urls")),
+]
