@@ -29,13 +29,17 @@ class Review(models.Model):
     ]
     rating = models.IntegerField(choices=RATING_CHOICES)
 
-    image1 = models.ImageField()
-    image2 = models.ImageField()
-    image3 = models.ImageField()
+    image1 = models.ImageField(upload_to="review_pics")
+    image2 = models.ImageField(upload_to="review_pics", blank=True) # 이렇게 하면 빈 내용을 제출해도 된다.
+    image3 = models.ImageField(upload_to="review_pics", blank=True) # 결국 이미지필드도 이미지의 url을 저장하는 원리기에 문자열 기반 필드에 해당한다.
     content = models.TextField()
     dt_created = models.DateTimeField(auto_now_add=True) # 생성된 시간 자동으로 field에 넣어줌
     dt_updated = models.DateTimeField(auto_now=True) # 마지막으로 저장된 시간 자동으로 field에 넣어줌
 
+    author = models.ForeignKey(User, on_delete=models.CASCADE) 
+    # foreign_key의 기능은 1:n 관계로 데이터베이스를 모델링할 때 n의 입장에서 기능할 수 있게 도와주는 도구다
+    # on_delete는 만들어둔 모델에서 유저의 관한 정보가 지워질 때 그동안 그가 적어둔 내용들 어떻게 처리할 것인가를 다룬다.
+    # 결국 위 코드의 최종적인 결과로 리뷰 내용들과 author을 우리는 1:n 관계로 묶어줬다.
+
     def __str__(self): # 리뷰의 제목 출력
         return self.title
-    
