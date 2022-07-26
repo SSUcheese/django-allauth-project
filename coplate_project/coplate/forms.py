@@ -1,5 +1,5 @@
 from django import forms
-from .models import User
+from .models import User, Review
 
 class SignupForm(forms.ModelForm):
     class Meta:
@@ -9,3 +9,23 @@ class SignupForm(forms.ModelForm):
     def signup(self, request, user):
         user.nickname = self.cleaned_data["nickname"]
         user.save()
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = [
+            "title",
+            "restaurant_name",
+            "restaurant_link",
+            "rating",
+            "image1",
+            "image2",
+            "image3",
+            "content",
+        ]
+        # widegts = {
+        #     "rating": forms.RadioSelect, # 펼처서 구하는거 말고 바로 구하게 해주는 코드
+        # }
+        widgets = {
+            "rating": forms.RadioSelect,
+        }

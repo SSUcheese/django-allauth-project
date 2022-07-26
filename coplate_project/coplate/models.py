@@ -21,13 +21,13 @@ class Review(models.Model):
     restaurant_link = models.URLField()
 
     RATING_CHOICES = [
-        (1, 1), # 해당 tuple 자료형에서 왼쪽 숫자는 model에 들어가는 애들이고 오른쪽은 선택지에 보여지는 값임
-        (2, 2),
-        (3, 3),
-        (4, 4),
-        (5, 5),
+        (1, "*"), # 해당 tuple 자료형에서 왼쪽 숫자는 model에 들어가는 애들이고 오른쪽은 선택지에 보여지는 값임
+        (2, "**"),
+        (3, "***"),
+        (4, "****"),
+        (5, "*****"),
     ]
-    rating = models.IntegerField(choices=RATING_CHOICES)
+    rating = models.IntegerField(choices=RATING_CHOICES, default = None)
 
     image1 = models.ImageField(upload_to="review_pics")
     image2 = models.ImageField(upload_to="review_pics", blank=True) # 이렇게 하면 빈 내용을 제출해도 된다.
