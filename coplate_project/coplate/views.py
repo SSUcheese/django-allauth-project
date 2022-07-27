@@ -1,6 +1,12 @@
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 from allauth.account.views import PasswordChangeView
 from .models import User, Review
 from .forms import ReviewForm
@@ -31,6 +37,16 @@ class ReviewCreateView(CreateView):
 
     def get_success_url(self):
         return reverse("review-detail", kwargs={"review_id":self.object.id})
+
+class ReviewUpdateView(UpdateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = "coplate/review_form.html"
+    pk_url_kwarg = "review_id"
+
+    # updateView는 작성자를 건들 필요가 없어서 form_valid가 필요없다.
+    def get_success_url(self):
+        return reverse("review-detail", kwargs={"review_id":self.object.id})    
 
 class CustomPasswordChangeView(PasswordChangeView): # 이거 기존 부모코드에서 있는 success_url 자식코드에서 오버라이딩 해서 사용하는 구조임
     def get_success_url(self): # 어떤 form이 성공적으로 처리되면 어디로 redirection 핳건지 정해주는 함수
