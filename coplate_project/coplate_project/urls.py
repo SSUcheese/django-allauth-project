@@ -28,6 +28,10 @@ urlpatterns = [
     # coplate
     path('', include('coplate.urls')), # 이거 겹쳐도 위에서부터 쭈르륵 확인하니까 ㄱㅊ
     # allauth
+    path("email-confirmation-required/",
+        TemplateView.as_view(template_name="coplate/email_confirmation_done.html"),
+        name="account_email_confirmation_required"
+    ),
     path("email-confirmation-done/",
         TemplateView.as_view(template_name="coplate/email_confirmation_done.html"),
         name="account_email_confirmation_done"

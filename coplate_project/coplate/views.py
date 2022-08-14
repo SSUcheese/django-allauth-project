@@ -7,6 +7,8 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
+from braces.views import LoginRequiredMixin, UserPassesTestMixin
+from allauth.account.models import EmailAddress
 from allauth.account.views import PasswordChangeView
 from .models import User, Review
 from .forms import ReviewForm
@@ -26,10 +28,15 @@ class ReviewDetailListView(DetailView):
     pk_url_kwarg = "review_id"
 # 참고로 detailView와 같이 object를 하나만 갖고 오는 view에선 context_object_name의 default 값이 model의 이름이 된다.
 
-class ReviewCreateView(CreateView):
+class ReviewCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView): 
+    # 여기서 access mixin은 generic view 옆에 써줘야 한다. 코드는 왼쪽에서 오른쪽으로 진행되니까.
+    # 저기서 UserPassesTestMixin은 user가 이메일 인증 통과했는지 알아보는 mixin이다.
     model = Review
     form_class = ReviewForm
     template_name = "coplate/review_form.html"
+
+    redirect_unauthenticated_users
+    raise_exeception
 
     def form_valid(self, form): # 데이터가 유효할 때 담아두는 obj 만들고 저장하는 여기에 author 데이터도 같이 넣어서 저장
         form.instance.author = self.request.user # 이게 기본적인 예시이고, 이런 view에서 현재 user에 접근할 떄는 request.user로 접근 앞에 self는 함수형 view와 달리 class형 view에서는 붙여줘야 한다.
@@ -38,6 +45,11 @@ class ReviewCreateView(CreateView):
     def get_success_url(self):
         return reverse("review-detail", kwargs={"review_id":self.object.id})
 
+    def test_func(self, user):
+        # 얘는 파라미터로 self, user을 받아 user의 view 접근가능여부를 boolean 값으로 알려준다.
+        return EmailAddress.objects.filter(user=user, verified=True).exists(): 
+        # 유저가 이메일 인증을 통과해는지 검증하는 코드, filter안에 내용은 user=user은 등록이 되었는지 여부 체크
+            
 class ReviewUpdateView(UpdateView):
     model = Review
     form_class = ReviewForm
