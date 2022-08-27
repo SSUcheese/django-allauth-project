@@ -171,7 +171,7 @@ ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True # 입력한 폼에 오류가 있어�
 ACCOUNT_EMAIL_VARIFICATION = "optioanl" # mendatory는 이메일 인증을 완료하기 전까지 로그인 불가  //  optional 회원가입시에 인증메일은 발송, 인증 안 해도 로그인 가능  //  none  인증메일도 없고 필요도 없음 // 참고로 기본값은 optional
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True # https://stackoverflow.com/questions/28248647/django-allauth-account-confirm-email-on-get-confusion
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "account_email_confirmation_done" # 유저가 로그인이 됐을 때 이메일 인증 후 넘어가는 페이지
-ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "account_email_confirmation_done" # 유저가 로그인이 안 됐을 때 이메일 인증 후 넘어가는 페이지
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "account_email_confirmation_done" # 유저가 로그인이 안 됐을 때 이메일 인증 후 넘어가는 페이지
 PASSWORD_RESET_TIMEOUT_DAYS = 3
 ACCOUNT_EMAIL_SUBJECT_PREFIX ="" # account 이메알 제목의 앞에 붙는 문자열을 빈 문자열로 만든다. 왜냐면 allauth가 발송하는 이메일의 가장 앞에는 오버라이딩 해도 항상 웹사이트 도메인이 앞에 붙음. 그거 없애기 위해서 하는거임 
 
