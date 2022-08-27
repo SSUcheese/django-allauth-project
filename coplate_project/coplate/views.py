@@ -60,23 +60,36 @@ class ReviewCreateView(LoginRequiredMixin, UserPassesTestMixin,CreateView):
         # 유저가 이메일 인증을 통과해는지 검증하는 코드, filter안에 내용은 user=user은 등록이 되었는지 여부 체크
             
             
-class ReviewUpdateView(UpdateView):
+class ReviewUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Review
     form_class = ReviewForm
     template_name = "coplate/review_form.html"
     pk_url_kwarg = "review_id"
+    
+    raise_exception = True # 페이지 접근권한이 없으면 403 exception 돌려준다
+    redirect_unauthenticated_users = False # 로그인 여부와 상관없이 403 보낼거임. 사실 이거는 default가 false라서 없어도 ㄱㅊ
 
     # updateView는 작성자를 건들 필요가 없어서 form_valid가 필요없다.
     def get_success_url(self):
-        return reverse("review-detail", kwargs={"review_id":self.object.id})    
+        return reverse("review-detail", kwargs={"review_id":self.object.id}) 
+    
+    def test_func(self, user):
+        review = self.get_object()
+        return review.author == user
 
-class ReviewDeleteView(DeleteView):
+class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Review
     tempalte_name = "coplate/review_confirm_delete.html"
     pk_url_kwarg = "review_id"
     
+    raise_exception = True
+    
     def get_success_url(self):
         return reverse("index")
+    
+    def test_func(self, user):
+        review = self.get_object()
+        return review.author == user
 
 class CustomPasswordChangeView(PasswordChangeView): # 이거 기존 부모코드에서 있는 success_url 자식코드에서 오버라이딩 해서 사용하는 구조임
     def get_success_url(self): # 어떤 form이 성공적으로 처리되면 어디로 redirection 핳건지 정해주는 함수
