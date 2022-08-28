@@ -11,6 +11,12 @@ class User(AbstractUser): # User모델의 user 인스턴스를 출력하는데 �
         error_messages={'unique': "이미 사용중인 닉네임입니다."}, # unique라는 error code가 발생하면 띄운다
     )
 
+    profile_pic = models.ImageField(
+        default="default_profile_pic.jpg",upload_to="profile_pics"
+    ) #저거 디폴트에 있는 사진 다른 폴더에 넣은 이유는 기존 애들과 구분하기 위해서임.
+    
+    intro = models.CharField(max_length=60, blank=True)
+    
     def __str__(self):
         return self.email # 홈페이지 안녕하세요 ㅡㅡ 님 이 부분에 메일이 나올거임
     
