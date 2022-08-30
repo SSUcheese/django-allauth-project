@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import (
     ListView,
@@ -97,12 +97,28 @@ class ProfileView(DetailView):
     pk_url_kwarg = "user_id" # url에서 user_id로 넘긴 값을 여기서 user_id로 받아준다
     context_object_name = "profile_user" # 기본값이 user인데 지금 user는 현재 user를 참조하는 데 사용되고 있기에 profile_user로 구분 필요.
 
-    def get_context_data(self, **kwargs): # 메소드 오버라이딩을 위한 정의 부분
+    def get_context_data(self, **kwargs): # 메소드 오버라이딩을 위한 정의 부분, 이거 쓴 이유는 위에 뷰 내용들엔 유저가 관한 정보가 없으니까
         context = super().get_context_data(**kwargs) # 기본적으로 전달되는 context를 갖고 와야 한다. 저기에 글이 답겨서 오는거임
         user_id = self.kwargs.get("user_id") # url에서 전달되는 user_id는 self.kwargs로 전달될 수 있음
         context["user_reviews"] = Review.objects.filter(author__id=user_id).order_by("-dt_created")[:4] # 이렇게 하면 최신 글 4개는 user_reviews라는 이름으로 템플릿에 전달
         return context
 
+class UserReviewListView(ListView):
+    model = Review
+    template_name = "coplate/user_review_list.html"
+    context_object_name = "user_reviews"
+    paginate_by = 4
+    
+    # 아래 쿼리셋 코드는 기본적으로 listView가 모델에 있는 데이터 전부 갖고 오니까 그거 싫으면 저거 오버라이드 헤주자
+    def get_queryset(self):
+        user_id = self.kwargs.get("user_id")
+        return Review.objects.filter(author__id=user_id).order_by('-dt_created')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["profile_user"]=get_object_or_404(User, id=self.kwargs.get("user_id"))
+        return context
+    
 class CustomPasswordChangeView(PasswordChangeView): # 이거 기존 부모코드에서 있는 success_url 자식코드에서 오버라이딩 해서 사용하는 구조임
     def get_success_url(self): # 어떤 form이 성공적으로 처리되면 어디로 redirection 핳건지 정해주는 함수
         return reverse("index")
