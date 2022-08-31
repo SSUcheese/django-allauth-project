@@ -11,7 +11,7 @@ from braces.views import LoginRequiredMixin, UserPassesTestMixin
 from allauth.account.models import EmailAddress
 from allauth.account.views import PasswordChangeView
 from .models import User, Review
-from .forms import ReviewForm
+from .forms import ReviewForm, ProfileForm
 from coplate.functions import confirmation_required_redirect
 
 
@@ -118,6 +118,18 @@ class UserReviewListView(ListView):
         context = super().get_context_data(**kwargs)
         context["profile_user"]=get_object_or_404(User, id=self.kwargs.get("user_id"))
         return context
+    
+class ProfileSetView(LoginRequiredMixin, UpdateView): # 이미 만들어진 오브젝트 필드에 프로필에 해당하는 내용 넣는 과정이니까
+    model = User
+    form_class = ProfileForm
+    template_name = "coplate/profile_set_form.html"
+    
+    def get_object(self, queryset=None):
+        # 클래스형 뷰에선 현재 유저를 self.request.user로 접근
+        return self.request.user
+    
+    def get_success_url(self):
+        return reverse("index")
     
 class CustomPasswordChangeView(PasswordChangeView): # 이거 기존 부모코드에서 있는 success_url 자식코드에서 오버라이딩 해서 사용하는 구조임
     def get_success_url(self): # 어떤 form이 성공적으로 처리되면 어디로 redirection 핳건지 정해주는 함수

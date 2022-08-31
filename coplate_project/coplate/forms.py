@@ -1,14 +1,15 @@
+from tkinter import Widget
 from django import forms
 from .models import User, Review
 
-class SignupForm(forms.ModelForm):
-    class Meta:
-        model = User # 이거는 기본제공 내용들
-        fields = ["nickname"] # 우리가 커스텀
+# class SignupForm(forms.ModelForm):
+#     class Meta:
+#         model = User # 이거는 기본제공 내용들
+#         fields = ["nickname"] # 우리가 커스텀
 
-    def signup(self, request, user):
-        user.nickname = self.cleaned_data["nickname"]
-        user.save()
+#     def signup(self, request, user):
+#         user.nickname = self.cleaned_data["nickname"]
+#         user.save()
 
 class ReviewForm(forms.ModelForm):
     class Meta:
@@ -28,4 +29,16 @@ class ReviewForm(forms.ModelForm):
         # }
         widgets = {
             "rating": forms.RadioSelect,
+        }
+        
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            "nickname",
+            "profile_pic",
+            "intro"
+        ]
+        widget = {
+            "intro": forms.Textarea
         }

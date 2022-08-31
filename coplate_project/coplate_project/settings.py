@@ -68,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'coplate.middleware.ProfileSetup'
 ]
 
 ROOT_URLCONF = 'coplate_project.urls'
@@ -157,14 +158,14 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-ACCOUNT_SIGNUP_REDIRECT_URL = "index" # 로그인 회원가입 url 자동으로 설정되던 부분 수정
+ACCOUNT_SIGNUP_REDIRECT_URL = "profile-set" # 로그인 회원가입 url 자동으로 설정되던 부분 수정
 LOGIN_REDIRECT_URL = "index" # 이건 로그인하면 어디로 갈건지 정해주는 사이트
 LOGIN_URL = "account_login" # 얘는 말 글대로 로그인 url에 대한 설정을 하는 부분, 이게 필요한 이유가 아까 적은 loginRequiredMixin은 로그인 안 됐으면 로그인 페이지로 안내하기에 그 url 주소를 알아야 안내하니까 필요함
 ACCOUNT_LOGOUT_ON_GET = True # 이 상태로 두면 false와는 달리 바로 로그아웃이 된다.
 ACCOUNT_AUTHENTICATION_METHOD = "email" # 원래는 username이 디폴트, 둘 다 쓰려면 "username_email" 이렇게 적어줘야 한다.
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_SIGNUP_FORM_CLASS = "coplate.forms.SignupForm" # signup시에 저거 폼 쓰자는 의미
+# ACCOUNT_SIGNUP_FORM_CLASS = "coplate.forms.SignupForm" # signup시에 저거 폼 쓰자는 의미
 ACCOUNT_SESSION_REMEMBER = True # 기본값은 false로 되어있음
 SESSION_COOKIE_AGE = 3600 # 기본값은 2주 python manage.py clearsessions
 ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True # 입력한 폼에 오류가 있어도 이거 true로 해두면 비번 날리지 않고 남겨준다.
